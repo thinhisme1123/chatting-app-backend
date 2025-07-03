@@ -9,7 +9,14 @@ export const loginController = async (req: Request, res: Response) => {
 
   try {
     const result = await loginUser(email, password);
-    const token = generateToken(result.userId); // your JWT or session logic
+    const token = generateToken(result.userId);
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: true, // bật nếu dùng HTTPS
+      sameSite: "strict",
+      maxAge: 1000 * 60 * 60 * 24, // 1 day
+    });
 
     res.json({
       user: result.user,
@@ -61,7 +68,8 @@ export const getAllUsersExceptMe = async (
       id: user._id.toString(),
       username: user.username,
       email: user.email,
-      isOnline: true, // or calculate from socket if you have it
+      avatar: user.avatar,
+      isOnline: true, 
     }));
 
     res.status(200).json(transformedUsers);

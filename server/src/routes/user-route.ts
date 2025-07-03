@@ -1,9 +1,9 @@
 import express from 'express';
-import { upload } from "../middleware/upload";
-import { updateAvatar } from '../interfaces/http/controllers/user.controller';
+import { uploadAvatar } from '../interfaces/http/controllers/user.controller';
+import { uploadAvatar as uploadMulter} from '../middleware/upload';
 
 const router = express.Router();
 
-router.post("/upload-avatar", upload.single("avatar"), updateAvatar);
+router.post("/upload-avatar", uploadMulter, uploadAvatar);
 
 export default router;

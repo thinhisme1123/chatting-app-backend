@@ -8,11 +8,13 @@ import mongoose from "mongoose";
 import { mainRoutes } from "./routes";
 import { MessageRepository } from "./interfaces/repositories/message.repository";
 import { MessageUseCases } from "./application/message/message-use-case";
+import cookieParser from "cookie-parser";
 
 const messageUseCases = new MessageUseCases(new MessageRepository());
 
 // Load env vars
 dotenv.config();
+
 
 // Express setup
 const app = express();
@@ -23,8 +25,12 @@ const io = new SocketIOServer(server, {
   },
 });
 
-app.use(cors());
+app.use(cors({
+  origin: process.env.CLIENT_URL || "http://localhost:3000", 
+  credentials: true,               
+}));
 app.use(express.json());
+app.use(cookieParser());
 
 mainRoutes(app);
 
