@@ -12,4 +12,8 @@ export class MessageUseCases {
   async getChatHistory(userA: string, userB: string): Promise<Message[]> {
     return await this.messageRepo.getChatHistory(userA, userB);
   }
+
+  async getLastMessageBetweenUsers(user1Id: string, user2Id: string): Promise<Message | null> {
+    return await this.messageRepo.getLastMessageBetweenUsers(user1Id, user2Id);
+  }
 }
