@@ -7,7 +7,7 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import { mainRoutes } from "./routes";
 import { MessageRepository } from "./interfaces/repositories/message.repository";
-import { MessageUseCases } from "./application/message/message-use-case";
+import { MessageUseCases } from "./application/message/message-use-case.interface";
 import cookieParser from "cookie-parser";
 
 const messageUseCases = new MessageUseCases(new MessageRepository());

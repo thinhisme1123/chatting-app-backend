@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { loginUser } from "../../../application/auth/login-use-case";
-import { registerUser } from "../../../application/auth/register-use-case";
+import { loginUser } from "../../../application/auth/login-use-case.interface";
+import { registerUser } from "../../../application/auth/register-use-case.interface";
 import { generateToken } from "../../../utils/jwt";
 import { UserModel } from "../../../infrastructure/db/models/user-model";
 
