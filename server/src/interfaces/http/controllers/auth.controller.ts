@@ -11,13 +11,6 @@ export const loginController = async (req: Request, res: Response) => {
     const result = await loginUser(email, password);
     const token = generateToken(result.userId);
 
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: true, // bật nếu dùng HTTPS
-      sameSite: "strict",
-      maxAge: 1000 * 60 * 60 * 24, // 1 day
-    });
-
     res.json({
       user: result.user,
       token,

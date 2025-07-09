@@ -1,10 +1,10 @@
 import jwt from "jsonwebtoken";
 
-const JWT_SECRET = process.env.JWT_SECRET || 'supersecrectkey';
 const EXPIRES_IN = "7d"; 
 
 export function generateToken(userId: string): string {
-  return jwt.sign({ userId }, JWT_SECRET, {
+  return jwt.sign({ userId }, process.env.JWT_SECRET as string, {
     expiresIn: EXPIRES_IN,
   });
 }
+// khác nhau về JWT_SECRECT lúc mới login vào có thể dẫn đến lỗi không thể đi qua lớp middleware
