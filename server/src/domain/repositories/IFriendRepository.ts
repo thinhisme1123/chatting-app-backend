@@ -1,4 +1,6 @@
 // domain/repositories/IFriendRepository.ts
+import { FriendRequestEntity } from "../enities/friend-request";
+import { PublicUser } from "../enities/public-user";
 import { User } from "../enities/user";
 
 export interface IFriendRepository {
@@ -6,4 +8,6 @@ export interface IFriendRepository {
   getReceivedRequests(userId: string): Promise<any[]>;
   respondToRequest(requestId: string, action: "accept" | "reject"): Promise<any>;
   getConfirmedFriends(userId: string): Promise<User[]>;
+  searchUsers(query: string, currentUserId: string): Promise<PublicUser[]>;
+  getPendingRequests(currentUserId: string): Promise<FriendRequestEntity[]>;
 }
