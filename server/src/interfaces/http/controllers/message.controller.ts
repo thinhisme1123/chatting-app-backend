@@ -1,6 +1,6 @@
 // 📁 server/src/interfaces/http/controllers/message-controller.ts
 import { Request, Response } from "express";
-import { MessageUseCases } from "../../../application/message/message-use-case.interface";
+import { MessageUseCases } from "../../../application/message/message-use-case.query";
 import { MessageRepository } from "../../repositories/message.repository";
 
 const messageUseCases = new MessageUseCases(new MessageRepository());

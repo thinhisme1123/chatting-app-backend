@@ -1,4 +1,5 @@
 // application/friend/FriendUseCase.ts
+import { PublicUser } from "../../domain/enities/public-user";
 import { IFriendRepository } from "../../domain/repositories/IFriendRepository";
 
 export class FriendUseCase {
@@ -18,5 +19,13 @@ export class FriendUseCase {
 
   async getConfirmedFriends(userId: string) {
     return await this.friendRepo.getConfirmedFriends(userId);
+  }
+
+  async searchUsers(query: string, currentUserId: string): Promise<PublicUser[]> {
+    return await this.friendRepo.searchUsers(query, currentUserId);
+  }
+
+  async getPendingRequests(currentUserId: string) {
+    return this.friendRepo.getPendingRequests(currentUserId);
   }
 }
