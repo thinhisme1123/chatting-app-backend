@@ -21,11 +21,21 @@ export class FriendUseCase {
     return await this.friendRepo.getConfirmedFriends(userId);
   }
 
-  async searchUsers(query: string, currentUserId: string): Promise<PublicUser[]> {
+  async searchUsers(
+    query: string,
+    currentUserId: string
+  ): Promise<PublicUser[]> {
     return await this.friendRepo.searchUsers(query, currentUserId);
   }
 
   async getPendingRequests(currentUserId: string) {
     return this.friendRepo.getPendingRequests(currentUserId);
+  }
+
+  async searchConfirmedFriends(
+    userId: string,
+    query: string
+  ): Promise<PublicUser[]> {
+    return this.friendRepo.searchConfirmedFriends(userId, query);
   }
 }
