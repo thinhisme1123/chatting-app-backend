@@ -7,7 +7,8 @@ export interface IFriendRepository {
   sendFriendRequest(fromUserId: string, toUserId: string): Promise<any>;
   getReceivedRequests(userId: string): Promise<any[]>;
   respondToRequest(requestId: string, action: "accept" | "reject"): Promise<any>;
-  getConfirmedFriends(userId: string): Promise<User[]>;
+  getConfirmedFriends(userId: string): Promise<PublicUser[]>;
   searchUsers(query: string, currentUserId: string): Promise<PublicUser[]>;
   getPendingRequests(currentUserId: string): Promise<FriendRequestEntity[]>;
+  searchConfirmedFriends(userId: string, query: string): Promise<PublicUser[]>;
 }

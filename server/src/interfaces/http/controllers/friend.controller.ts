@@ -28,7 +28,7 @@ export const respondToFriendRequestController = async (req: Request, res: Respon
 
 export const getConfirmedFriendsController = async (req: Request, res: Response): Promise<void> => {
   try {
-    const userId = (req as any).user.id;
+    const userId = req.body.userId;
     const result = await friendUseCase.getConfirmedFriends(userId);
     res.status(200).json(result);
   } catch (err) {
@@ -74,7 +74,12 @@ export const getPendingRequestsController = async (req: Request, res: Response) 
   res.json(requests);
 };
 
-
-
-
-
+export const searchConfirmedFriendsController = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { userId, query } = req.query;
+    const results = await friendUseCase.searchConfirmedFriends(userId as string, query as string);
+    res.status(200).json(results);
+  } catch (err) {
+    res.status(400).json({ error: "Failed to search friends" });
+  }
+};

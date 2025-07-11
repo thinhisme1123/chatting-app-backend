@@ -5,6 +5,7 @@ import {
   getPendingRequestsController,
   getSentFriendRequestsController,
   respondToFriendRequestController,
+  searchConfirmedFriendsController,
   searchUsersController,
   sendFriendRequestController
 } from '../interfaces/http/controllers/friend.controller';
@@ -15,8 +16,9 @@ const router = express.Router();
 router.post('/pending-requests', authMiddleware, getPendingRequestsController);
 router.post('/request', authMiddleware, sendFriendRequestController);
 router.post('/respond', authMiddleware, respondToFriendRequestController);
-router.get('/list', authMiddleware, getConfirmedFriendsController);
+router.post('/list', authMiddleware, getConfirmedFriendsController);
 router.post('/search', authMiddleware, searchUsersController);
 router.post('/sent', authMiddleware, getSentFriendRequestsController);
+router.get("/search",authMiddleware, searchConfirmedFriendsController);
 
 export default router;
