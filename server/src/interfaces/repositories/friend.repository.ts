@@ -19,6 +19,12 @@ export class FriendRepository implements IFriendRepository {
       toUser: toUserId,
     });
     await request.save();
+
+    await request.populate({
+      path: "fromUser",
+      select: "id username email avatar", // chỉ lấy fields cần dùng
+    });
+
     return request;
   }
 

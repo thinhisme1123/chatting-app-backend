@@ -15,7 +15,6 @@ const messageUseCases = new MessageUseCases(new MessageRepository());
 // Load env vars
 dotenv.config();
 
-
 // Express setup
 const app = express();
 const server = http.createServer(app);
@@ -25,10 +24,12 @@ const io = new SocketIOServer(server, {
   },
 });
 
-app.use(cors({
-  origin: process.env.CLIENT_URL || "http://localhost:3000", 
-  credentials: true,               
-}));
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL || "http://localhost:3000",
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use(cookieParser());
 
@@ -90,27 +91,29 @@ io.on("connection", (socket) => {
 
     io.emit("online-users", Array.from(onlineUsers.keys()));
   });
-  
+
   // handle user is typing
   socket.on("typing", ({ userId, username, toUserId }) => {
-  const targetSocketId = onlineUsers.get(toUserId);
-  console.log(toUserId);
-  console.log(onlineUsers);
-  
-  if (targetSocketId) {
-    console.log(123);
-    io.to(targetSocketId).emit("user-typing", { userId, username });
-  }
+    const targetSocketId = onlineUsers.get(toUserId);
+    console.log(toUserId);
+    console.log(onlineUsers);
+
+    if (targetSocketId) {
+      console.log(123);
+      io.to(targetSocketId).emit("user-typing", { userId, username });
+    }
+  });
+
+  socket.on("stop-typing", ({ userId, toUserId }) => {
+    const targetSocketId = onlineUsers.get(toUserId);
+    if (targetSocketId) {
+      console.log("Stop");
+      io.to(targetSocketId).emit("user-stop-typing", { userId });
+    }
+  });
 });
 
-socket.on("stop-typing", ({ userId, toUserId }) => {
-  const targetSocketId = onlineUsers.get(toUserId);
-  if (targetSocketId) {
-    console.log("Stop");
-    io.to(targetSocketId).emit("user-stop-typing", { userId });
-  }
-});
-});
+export { io, onlineUsers };
 
 const PORT = process.env.PORT || 3001;
 server.listen(PORT, () => {
