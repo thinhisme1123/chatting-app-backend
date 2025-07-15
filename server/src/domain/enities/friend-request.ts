@@ -7,4 +7,5 @@ export interface FriendRequestEntity {
     avatar?: string;
   };
   createdAt: Date;
+  read: boolean;
 }
