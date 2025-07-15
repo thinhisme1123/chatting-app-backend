@@ -56,11 +56,12 @@ io.on("connection", (socket) => {
 
   socket.on(
     "send-message",
-    async ({ toUserId, fromUserId, message, senderName }) => {
+    async ({ toUserId, fromUserId, message, senderName, senderAvatar }) => {
       const newMessage = await messageUseCases.saveMessage({
         toUserId,
         fromUserId,
         senderName,
+        senderAvatar,
         content: message,
         timestamp: new Date(),
       });
