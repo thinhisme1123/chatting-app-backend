@@ -5,6 +5,7 @@ const MessageSchema = new mongoose.Schema({
   fromUserId: { type: String, required: true },
   toUserId: { type: String, required: true },
   senderName: { type: String, required: true },
+  senderAvatar: { type: String, required: true },
   content: { type: String, required: true },
   timestamp: { type: Date, default: Date.now },
 });
