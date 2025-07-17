@@ -1,7 +1,8 @@
 import { MessageModel } from "./../../infrastructure/db/models/message-model";
-import { Message } from "../../domain/enities/message";
+import { Message } from "../../domain/enities/message.enity";
+import { IMessageRepository } from "../../domain/repositories/message.repository.interface";
 
-export class MessageRepository {
+export class MessageRepository implements IMessageRepository{
   async save(message: Omit<Message, "id">): Promise<Message> {
     const saved = await new MessageModel(message).save();
     return {

@@ -72,6 +72,20 @@ io.on("connection", (socket) => {
       }
     }
   );
+  
+  socket.on("group-created", ({ roomId, name, members }) => {
+    members.forEach((userId: string) => {
+      const socketId = onlineUsers.get(userId);
+      if (socketId) {
+        io.to(socketId).emit("new-group-notification", {
+          roomId,
+          name,
+          createdAt: new Date(),
+          type: "group-invite",
+        });
+      }
+    });
+  });
 
   socket.on("disconnect", () => {
     let disconnectedUserId: string | null = null;
