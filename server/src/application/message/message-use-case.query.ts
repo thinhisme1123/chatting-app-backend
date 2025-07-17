@@ -1,6 +1,6 @@
 // 📁 server/src/application/usecases/MessageUseCases.ts
 import { MessageRepository } from "../../interfaces/repositories/message.repository";
-import { Message } from "../../domain/enities/message";
+import { Message } from "../../domain/enities/message.enity";
 
 export class MessageUseCases {
   constructor(private messageRepo: MessageRepository) {}

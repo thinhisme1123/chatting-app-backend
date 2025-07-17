@@ -1,6 +1,6 @@
 // application/friend/FriendUseCase.ts
-import { PublicUser } from "../../domain/enities/public-user";
-import { IFriendRepository } from "../../domain/repositories/IFriendRepository";
+import { PublicUser } from "../../domain/enities/public-user.enity";
+import { IFriendRepository } from "../../domain/repositories/friend.repository.interface";
 
 export class FriendUseCase {
   constructor(private friendRepo: IFriendRepository) {}

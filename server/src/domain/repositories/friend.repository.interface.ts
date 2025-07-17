@@ -1,7 +1,7 @@
 // domain/repositories/IFriendRepository.ts
-import { FriendRequestEntity } from "../enities/friend-request";
-import { PublicUser } from "../enities/public-user";
-import { User } from "../enities/user";
+import { FriendRequestEntity } from "../enities/friend-request.enity";
+import { PublicUser } from "../enities/public-user.enity";
+import { User } from "../enities/user.enity";
 
 export interface IFriendRepository {
   sendFriendRequest(fromUserId: string, toUserId: string): Promise<any>;

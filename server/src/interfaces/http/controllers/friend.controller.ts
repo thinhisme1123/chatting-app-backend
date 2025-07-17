@@ -4,7 +4,7 @@ import { FriendUseCase } from "../../../application/friend/friend-use-case.query
 import { FriendRepository } from "../../repositories/friend.repository";
 import { FriendRequestModel } from "../../../infrastructure/db/models/friend-request-model";
 import { io, onlineUsers } from "../../../server";
-import { FriendRequestEntity } from "../../../domain/enities/friend-request";
+import { FriendRequestEntity } from "../../../domain/enities/friend-request.enity";
 
 const friendUseCase = new FriendUseCase(new FriendRepository());
 

@@ -18,9 +18,6 @@ export const uploadAvatar = async (req: Request, res: Response): Promise<void> =
   try {
     const file = req.file;
     const userId = req.body.userId;
-    console.log("File:", file);
-    console.log("User ID:", userId);
-    
 
     if (!file) {
       res.status(400).json({ message: "No file uploaded" });
@@ -47,7 +44,6 @@ export const uploadAvatar = async (req: Request, res: Response): Promise<void> =
     await upload.done();
 
     const imageUrl = `https://${process.env.CLOUDFRONT_DOMAIN}/${fileKey}`;
-    console.log(imageUrl);
     
     await UserModel.findByIdAndUpdate(userId, { avatar: imageUrl });
 
@@ -58,3 +54,42 @@ export const uploadAvatar = async (req: Request, res: Response): Promise<void> =
   }
 };
 
+export const uploadGroupAvatar = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const file = req.file;
+    const userId = req.body.userId;
+
+    if (!file) {
+      res.status(400).json({ message: "No file uploaded" });
+      return;
+    }
+
+    if (!userId) {
+      res.status(400).json({ message: "User ID is required" });
+      return;
+    }
+
+    const fileKey = `avatars/${Date.now()}_${file.originalname}`;
+
+    const upload = new Upload({
+      client: s3,
+      params: {
+        Bucket: process.env.AWS_BUCKET_NAME!,
+        Key: fileKey,
+        Body: file.buffer,
+        ContentType: file.mimetype,
+      },
+    });
+
+    await upload.done();
+
+    const imageUrl = `https://${process.env.CLOUDFRONT_DOMAIN}/${fileKey}`;
+    
+    await UserModel.findByIdAndUpdate(userId, { avatar: imageUrl });
+
+    res.status(200).json({ imageUrl }); // ✅ No `return`
+  } catch (error) {
+    console.error("Upload failed:", error);
+    res.status(500).json({ message: "Upload failed", error });
+  }
+};
