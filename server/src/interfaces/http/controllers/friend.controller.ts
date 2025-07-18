@@ -52,17 +52,43 @@ export const respondToFriendRequestController = async (
 ): Promise<void> => {
   try {
     const { requestId, action } = req.body;
+
     const result = await friendUseCase.respondToRequest(requestId, action);
+
+    // ✅ Only emit if the action is "accept"
+    if (action === "accept") {
+      const requesterId = result.requester.id; // người gửi lời mời
+      const acceptedUser = result.receiver; // người vừa accept
+
+      const targetSocketId = onlineUsers.get(requesterId);
+
+      const normalizedAcceptedUser = {
+        id: acceptedUser._id.toString(),
+        email: acceptedUser.email,
+        username: acceptedUser.username,
+        avatar: acceptedUser.avatar,
+        isOnline: true, 
+        lastSeen: new Date(), 
+        createdAt: acceptedUser.createdAt || new Date(),
+      };
+      // Send event to the requester (người đã gửi lời mời)
+      if (targetSocketId) {
+        io.to(targetSocketId).emit("friend-request-accepted", {
+          newFriend: normalizedAcceptedUser,
+        });
+      } else {
+        console.warn("⚠️ Requester is not online:", requesterId);
+      }
+    }
+
     res.status(200).json(result);
   } catch (err) {
-    res
-      .status(400)
-      .json({
-        error:
-          err instanceof Error
-            ? err.message
-            : "Failed to respond to friend request",
-      });
+    res.status(400).json({
+      error:
+        err instanceof Error
+          ? err.message
+          : "Failed to respond to friend request",
+    });
   }
 };
 
@@ -75,12 +101,10 @@ export const getConfirmedFriendsController = async (
     const result = await friendUseCase.getConfirmedFriends(userId);
     res.status(200).json(result);
   } catch (err) {
-    res
-      .status(400)
-      .json({
-        error:
-          err instanceof Error ? err.message : "Failed to fetch friends list",
-      });
+    res.status(400).json({
+      error:
+        err instanceof Error ? err.message : "Failed to fetch friends list",
+    });
   }
 };
 

@@ -36,11 +36,25 @@ export class FriendRepository implements IFriendRepository {
 
   async respondToRequest(requestId: string, action: "accept" | "reject") {
     const status = action === "accept" ? "accepted" : "rejected";
-    return await FriendRequestModel.findByIdAndUpdate(
+
+    const updatedRequest = await FriendRequestModel.findByIdAndUpdate(
       requestId,
       { status },
       { new: true }
-    );
+    )
+      .populate("fromUser") // requester
+      .populate("toUser"); // receiver
+
+    if (!updatedRequest) {
+      throw new Error("Friend request not found");
+    }
+
+    // Optionally: Save both users as friends in DB (if you're not doing this yet)
+
+    return {
+      requester: updatedRequest.fromUser,
+      receiver: updatedRequest.toUser,
+    };
   }
 
   async getConfirmedFriends(userId: string): Promise<PublicUser[]> {
