@@ -3,7 +3,7 @@ import { MessageRepository } from "../../interfaces/repositories/message.reposit
 import { Message } from "../../domain/enities/message.enity";
 
 export class MessageUseCases {
-  constructor(private messageRepo: MessageRepository) {}
+  constructor(private readonly messageRepo: MessageRepository) {}
 
   async saveMessage(message: Omit<Message, "id">): Promise<Message> {
     return await this.messageRepo.save(message);
