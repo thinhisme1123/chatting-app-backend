@@ -42,15 +42,13 @@ export class FriendRepository implements IFriendRepository {
       { status },
       { new: true }
     )
-      .populate("fromUser") // requester
-      .populate("toUser"); // receiver
+      .populate("fromUser") 
+      .populate("toUser"); 
 
     if (!updatedRequest) {
       throw new Error("Friend request not found");
     }
-
-    // Optionally: Save both users as friends in DB (if you're not doing this yet)
-
+    
     return {
       requester: updatedRequest.fromUser,
       receiver: updatedRequest.toUser,

@@ -10,5 +10,5 @@ export const mainRoutes = (app: Express) => {
   app.use("/messages", messageRoutes);
   app.use("/user", userRoutes);
   app.use("/friend", friendRoutes);
-  app.use("/chat", chatRoutes);
+  app.use("/chatroom", chatRoutes);
 };

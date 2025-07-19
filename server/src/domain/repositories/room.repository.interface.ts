@@ -1,9 +1,11 @@
-import { Room } from './../enities/room.enity';
+// src/domain/repositories/room.repository.interface.ts
+import { ChatRoom } from "../enities/chat-room.enity";
 
 export interface IRoomRepository {
-  createRoom(
-    name: string,
-    creatorId: string,
-    memberIds: string[]
-  ): Promise<Room>;
+  createRoom(room: {
+    name: string;
+    createdBy: string;
+    members: string[];
+    avatar?: string;
+  }): Promise<ChatRoom>;
 }
