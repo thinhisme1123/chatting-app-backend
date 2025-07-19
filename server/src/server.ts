@@ -9,6 +9,7 @@ import { mainRoutes } from "./routes";
 import { MessageRepository } from "./interfaces/repositories/message.repository";
 import { MessageUseCases } from "./application/message/message-use-case.query";
 import cookieParser from "cookie-parser";
+import { groupMessageSocketHandler } from "./interfaces/http/controllers/message.controller";
 
 const messageUseCases = new MessageUseCases(new MessageRepository());
 
@@ -72,20 +73,25 @@ io.on("connection", (socket) => {
       }
     }
   );
-  
-  socket.on("group-created", ({ roomId, name, members }) => {
-    members.forEach((userId: string) => {
-      const socketId = onlineUsers.get(userId);
+
+  socket.on("group-created", ({ roomId, avatar, name, members }) => {
+    console.log(members);
+    members.forEach((user: any) => {
+      const socketId = onlineUsers.get(user.id);
       if (socketId) {
         io.to(socketId).emit("new-group-notification", {
           roomId,
           name,
+          avatar,
           createdAt: new Date(),
           type: "group-invite",
         });
       }
     });
   });
+
+  // handle save group message
+  groupMessageSocketHandler(io, socket, messageUseCases);
 
   socket.on("disconnect", () => {
     let disconnectedUserId: string | null = null;

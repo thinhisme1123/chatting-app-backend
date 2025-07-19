@@ -1,14 +1,12 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose from "mongoose";
 
-const RoomSchema = new Schema(
-  {
-    name: { type: String, required: true },
-    isGroup: { type: Boolean, default: true },
-    createdBy: { type: String, required: true },
-    members: [{ type: String, required: true }],
-  },
-  { timestamps: true }
-);
+const RoomSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  isGroup: { type: Boolean, default: false },
+  createdBy: { type: mongoose.Schema.Types.ObjectId},
+  members: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+  avatar: { type: String, default: "" }, 
+  createdAt: { type: Date, default: Date.now },
+});
 
-const RoomModel = mongoose.model("Room", RoomSchema);
-export default RoomModel;
+export const RoomModel = mongoose.model('Room', RoomSchema);

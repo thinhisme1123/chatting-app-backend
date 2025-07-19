@@ -1,3 +1,4 @@
+import { GroupMessage } from "../enities/group-message.enity";
 import { Message } from "../enities/message.enity";
 
 export interface IMessageRepository {
@@ -7,4 +8,5 @@ export interface IMessageRepository {
     user1Id: string,
     user2Id: string
   ): Promise<Message | null>;
+  saveGroupMessage(message: Omit<GroupMessage, "id">): Promise<GroupMessage>;
 }

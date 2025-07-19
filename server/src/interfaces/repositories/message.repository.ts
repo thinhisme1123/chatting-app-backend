@@ -1,6 +1,8 @@
 import { MessageModel } from "./../../infrastructure/db/models/message-model";
 import { Message } from "../../domain/enities/message.enity";
 import { IMessageRepository } from "../../domain/repositories/message.repository.interface";
+import { GroupMessage } from "../../domain/enities/group-message.enity";
+import { GroupMessageModel } from "../../infrastructure/db/models/group-message.model";
 
 export class MessageRepository implements IMessageRepository{
   async save(message: Omit<Message, "id">): Promise<Message> {
@@ -37,5 +39,18 @@ export class MessageRepository implements IMessageRepository{
       ...lastMsg.toObject(),
       id: lastMsg._id.toString(),
     } : null;
+  }
+
+  async saveGroupMessage(message: Omit<GroupMessage, "id">): Promise<GroupMessage> {
+    const saved = await new GroupMessageModel(message).save();
+    return {
+      id: saved._id.toString(),
+      roomId: saved.roomId,
+      senderId: saved.senderId,
+      senderName: saved.senderName,
+      senderAvatar: saved.senderAvatar, 
+      content: saved.content,
+      timestamp: saved.timestamp,
+    };
   }
 }
