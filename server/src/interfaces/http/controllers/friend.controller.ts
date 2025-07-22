@@ -19,6 +19,8 @@ export const sendFriendRequestController = async (
 
     // 👇 Emit socket event to the recipient
     const targetSocketId = onlineUsers.get(toUserId);
+    console.log(targetSocketId);
+    
     if (targetSocketId) {
       const notification: FriendRequestEntity = {
         id: request._id.toString(),
@@ -31,7 +33,8 @@ export const sendFriendRequestController = async (
         createdAt: request.createdAt.toISOString(),
         read: false, // mặc định là chưa đọc
       };
-
+      console.log(notification);
+      
       io.to(targetSocketId).emit("friend-request-notification", notification);
     } else {
       console.log(`🔕 User ${toUserId} is offline`);
@@ -76,6 +79,7 @@ export const respondToFriendRequestController = async (
         io.to(targetSocketId).emit("friend-request-accepted", {
           newFriend: normalizedAcceptedUser,
         });
+        console.log(normalizedAcceptedUser);
       } else {
         console.warn("⚠️ Requester is not online:", requesterId);
       }

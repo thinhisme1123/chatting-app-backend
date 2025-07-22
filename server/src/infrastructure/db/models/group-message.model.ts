@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 
 const GroupMessageSchema = new mongoose.Schema({
   roomId: { type: String, required: true },
-  senderId: { type: String, required: true },
+  fromUserId: { type: String, required: true },
   senderName: { type: String, required: true },
   senderAvatar: { type: String , required: true},
   content: { type: String, required: true },

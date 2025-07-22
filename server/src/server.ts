@@ -68,6 +68,7 @@ io.on("connection", (socket) => {
       });
 
       const targetSocketId = onlineUsers.get(toUserId);
+      
       if (targetSocketId) {
         io.to(targetSocketId).emit("receive-message", newMessage);
       }
@@ -75,7 +76,6 @@ io.on("connection", (socket) => {
   );
 
   socket.on("group-created", ({ roomId, avatar, name, members }) => {
-    console.log(members);
     members.forEach((user: any) => {
       const socketId = onlineUsers.get(user.id);
       if (socketId) {
@@ -83,6 +83,7 @@ io.on("connection", (socket) => {
           roomId,
           name,
           avatar,
+          members,
           createdAt: new Date(),
           type: "group-invite",
         });
@@ -92,7 +93,6 @@ io.on("connection", (socket) => {
 
   // handle save group message
   groupMessageSocketHandler(io, socket, messageUseCases);
-
   socket.on("disconnect", () => {
     let disconnectedUserId: string | null = null;
 
@@ -116,11 +116,9 @@ io.on("connection", (socket) => {
   // handle user is typing
   socket.on("typing", ({ userId, username, toUserId }) => {
     const targetSocketId = onlineUsers.get(toUserId);
-    console.log(toUserId);
     console.log(onlineUsers);
-
-    if (targetSocketId) {
-      console.log(123);
+    
+    if (targetSocketId) {;
       io.to(targetSocketId).emit("user-typing", { userId, username });
     }
   });
