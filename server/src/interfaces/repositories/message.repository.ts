@@ -46,7 +46,7 @@ export class MessageRepository implements IMessageRepository{
     return {
       id: saved._id.toString(),
       roomId: saved.roomId,
-      senderId: saved.senderId,
+      fromUserId: saved.fromUserId,
       senderName: saved.senderName,
       senderAvatar: saved.senderAvatar, 
       content: saved.content,

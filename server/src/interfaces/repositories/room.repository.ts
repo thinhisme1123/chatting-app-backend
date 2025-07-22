@@ -1,10 +1,13 @@
+import { GroupMessageModel } from './../../infrastructure/db/models/group-message.model';
 // src/infrastructure/repositories/room.repository.ts
 import { ChatRoom } from "../../domain/enities/chat-room.enity";
+import { GroupMessage } from '../../domain/enities/group-message.enity';
 import { IRoomRepository } from "../../domain/repositories/room.repository.interface";
 import { RoomModel } from "../../infrastructure/db/models/room-model";
 import { UserModel } from "../../infrastructure/db/models/user-model";
 
 export class RoomRepository implements IRoomRepository {
+  
   async createRoom(room: {
     name: string;
     createdBy: string;
@@ -61,6 +64,23 @@ export class RoomRepository implements IRoomRepository {
             avatar: m.avatar,
           }))
         : [],
+    }));
+  }
+
+  async getMessagesByRoomId(roomId: string): Promise<GroupMessage[]> {
+    const messages = await GroupMessageModel.find({ roomId })
+      .sort({ timestamp: 1 })
+      .lean();
+
+    // map _id -> id để khớp với interface nếu cần
+    return messages.map((msg: any) => ({
+      id: msg._id.toString(),
+      roomId: msg.roomId,
+      fromUserId: msg.fromUserId,
+      senderName: msg.senderName,
+      senderAvatar: msg.senderAvatar,
+      content: msg.content,
+      timestamp: msg.timestamp,
     }));
   }
 }

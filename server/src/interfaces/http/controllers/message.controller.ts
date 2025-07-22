@@ -15,6 +15,8 @@ export const getChatHistory = async (req: Request, res: Response) => {
     res.status(500).json({ error: "Failed to fetch message history" });
   }
 };
+
+
 export const getLastMessage = async (req: Request, res: Response): Promise<void> => {
   try {
     const { user1, user2 } = req.query;
@@ -40,12 +42,12 @@ export const groupMessageSocketHandler = (
   messageUseCase: MessageUseCases
 ) => {
   socket.on("send-group-message", async (data) => {
-    const { roomId, content, senderId, senderName, senderAvatar } = data;
+    const { roomId, content, fromUserId, senderName, senderAvatar } = data;
     const timestamp = new Date();
 
     const savedMessage = await messageUseCase.saveGroupMessage({
       roomId,
-      senderId,
+      fromUserId,
       senderName,
       senderAvatar,
       content,
@@ -54,7 +56,7 @@ export const groupMessageSocketHandler = (
 
     io.to(roomId).emit("receive-message", {
       ...savedMessage,
-      isOwn: false, // bạn có thể điều chỉnh bên FE tùy cách handle
+      isOwn: false,
     });
 
     console.log(`📨 Group msg in ${roomId}:`, content);

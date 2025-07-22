@@ -2,7 +2,7 @@
 export interface GroupMessage {
   id: string;
   roomId: string;
-  senderId: string;
+  fromUserId: string;
   senderName: string;
   senderAvatar: string;
   content: string;
