@@ -48,7 +48,7 @@ export class MessageRepository implements IMessageRepository{
       roomId: saved.roomId,
       fromUserId: saved.fromUserId,
       senderName: saved.senderName,
-      senderAvatar: saved.senderAvatar, 
+      senderAvatar: saved.senderAvatar || '', 
       content: saved.content,
       timestamp: saved.timestamp,
     };

@@ -4,7 +4,7 @@ export interface GroupMessage {
   roomId: string;
   fromUserId: string;
   senderName: string;
-  senderAvatar: string;
+  senderAvatar?: string;
   content: string;
   timestamp: Date;
 }

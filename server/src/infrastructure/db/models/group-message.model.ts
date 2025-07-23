@@ -5,7 +5,7 @@ const GroupMessageSchema = new mongoose.Schema({
   roomId: { type: String, required: true },
   fromUserId: { type: String, required: true },
   senderName: { type: String, required: true },
-  senderAvatar: { type: String , required: true},
+  senderAvatar: { type: String},
   content: { type: String, required: true },
   timestamp: { type: Date, default: Date.now },
 });
