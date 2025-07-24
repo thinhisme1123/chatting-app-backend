@@ -68,7 +68,7 @@ io.on("connection", (socket) => {
       });
 
       const targetSocketId = onlineUsers.get(toUserId);
-      
+
       if (targetSocketId) {
         io.to(targetSocketId).emit("receive-message", newMessage);
       }
@@ -116,11 +116,20 @@ io.on("connection", (socket) => {
   // handle user is typing
   socket.on("typing", ({ userId, username, toUserId }) => {
     const targetSocketId = onlineUsers.get(toUserId);
-    console.log(onlineUsers);
-    
-    if (targetSocketId) {;
+    if (targetSocketId) {
       io.to(targetSocketId).emit("user-typing", { userId, username });
     }
+  });
+
+  // Group typing handler
+  socket.on("group-typing", ({ roomId, userId, username , avatar}) => {
+    console.log(`✏️ User ${username} is typing in group ${roomId}`);
+    io.to(roomId).emit("group-user-typing", {roomId, username, userId, avatar});
+  });
+
+  socket.on("group-stop-typing", ({ roomId, userId }) => {
+    console.log(`⛔️ User ${userId} stopped typing in group ${roomId}`);
+    io.to(roomId).emit("group-user-stop-typing", { roomId, userId });
   });
 
   socket.on("stop-typing", ({ userId, toUserId }) => {
