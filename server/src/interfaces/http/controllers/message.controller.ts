@@ -35,14 +35,13 @@ export const getLastMessage = async (req: Request, res: Response): Promise<void>
   }
 };
 
-
 export const groupMessageSocketHandler = (
   io: Server,
   socket: Socket,
   messageUseCase: MessageUseCases
 ) => {
   socket.on("send-group-message", async (data) => {
-    const { roomId, content, fromUserId, senderName, senderAvatar } = data;
+    const { roomId, content, fromUserId, senderName, senderAvatar , replyTo  } = data;
     const timestamp = new Date();
 
     const savedMessage = await messageUseCase.saveGroupMessage({
@@ -52,6 +51,7 @@ export const groupMessageSocketHandler = (
       senderAvatar,
       content,
       timestamp,
+      replyTo: replyTo || undefined,
     });
 
     io.to(roomId).emit("receive-message", {

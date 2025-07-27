@@ -6,4 +6,9 @@ export interface Message {
   senderAvatar: string;
   content: string;
   timestamp: Date;
+  replyTo?: {
+    id: string;
+    content: string;
+    senderName: string;
+  } | null;
 }

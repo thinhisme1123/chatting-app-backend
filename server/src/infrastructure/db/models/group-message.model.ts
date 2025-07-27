@@ -8,6 +8,11 @@ const GroupMessageSchema = new mongoose.Schema({
   senderAvatar: { type: String},
   content: { type: String, required: true },
   timestamp: { type: Date, default: Date.now },
+  replyTo: {
+    id: String,
+    content: String,
+    senderName: String,
+  },
 });
 
 export const GroupMessageModel = mongoose.model("GroupMessage", GroupMessageSchema);
