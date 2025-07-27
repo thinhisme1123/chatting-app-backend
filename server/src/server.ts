@@ -57,7 +57,7 @@ io.on("connection", (socket) => {
 
   socket.on(
     "send-message",
-    async ({ toUserId, fromUserId, message, senderName, senderAvatar }) => {
+    async ({ toUserId, fromUserId, message, senderName, senderAvatar, replyTo }) => {
       const newMessage = await messageUseCases.saveMessage({
         toUserId,
         fromUserId,
@@ -65,6 +65,7 @@ io.on("connection", (socket) => {
         senderAvatar,
         content: message,
         timestamp: new Date(),
+        replyTo: replyTo || undefined,
       });
 
       const targetSocketId = onlineUsers.get(toUserId);
