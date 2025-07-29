@@ -9,9 +9,13 @@ const GroupMessageSchema = new mongoose.Schema({
   content: { type: String, required: true },
   timestamp: { type: Date, default: Date.now },
   replyTo: {
-    id: String,
-    content: String,
-    senderName: String,
+    type: {
+      id: { type: String, default: null },
+      content: { type: String, default: null },
+      senderName: { type: String, default: null },
+    },
+    default: undefined, 
+    required: false, 
   },
 });
 

@@ -7,4 +7,3 @@ export function generateToken(userId: string): string {
     expiresIn: EXPIRES_IN,
   });
 }
-// khác nhau về JWT_SECRECT lúc mới login vào có thể dẫn đến lỗi không thể đi qua lớp middleware

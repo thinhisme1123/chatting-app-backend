@@ -43,6 +43,7 @@ export class MessageRepository implements IMessageRepository{
 
   async saveGroupMessage(message: Omit<GroupMessage, "id">): Promise<GroupMessage> {
     const saved = await new GroupMessageModel(message).save();
+    
     return {
       id: saved._id.toString(),
       roomId: saved.roomId,
@@ -51,6 +52,7 @@ export class MessageRepository implements IMessageRepository{
       senderAvatar: saved.senderAvatar || '', 
       content: saved.content,
       timestamp: saved.timestamp,
+      replyTo: saved.replyTo
     };
   }
 }
