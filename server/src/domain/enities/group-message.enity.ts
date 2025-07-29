@@ -11,5 +11,5 @@ export interface GroupMessage {
     id: string;
     content: string;
     senderName: string;
-  };
+  } | null;
 }

@@ -43,17 +43,19 @@ export const groupMessageSocketHandler = (
   socket.on("send-group-message", async (data) => {
     const { roomId, content, fromUserId, senderName, senderAvatar , replyTo  } = data;
     const timestamp = new Date();
-
+    console.log(replyTo);
+    
     const savedMessage = await messageUseCase.saveGroupMessage({
       roomId,
       fromUserId,
       senderName,
       senderAvatar,
       content,
+      replyTo: replyTo,
       timestamp,
-      replyTo: replyTo || undefined,
     });
-
+    console.log(savedMessage);
+    
     io.to(roomId).emit("receive-message", {
       ...savedMessage,
       isOwn: false,

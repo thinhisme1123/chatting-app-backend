@@ -8,7 +8,7 @@ export const authMiddleware = async (
   next: NextFunction
 ): Promise<void> => {
   const authHeader = req.headers.authorization;
-
+  
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
     res.status(401).json({ error: "Unauthorized: No token provided" });
     return;
