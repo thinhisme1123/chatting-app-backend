@@ -3,7 +3,7 @@ export interface Message {
   fromUserId: string;
   toUserId: string;
   senderName: string;
-  senderAvatar: string;
+  senderAvatar?: string;
   content: string;
   timestamp: Date;
   replyTo?: {

@@ -21,7 +21,13 @@ export class MessageUseCases {
     return await this.messageRepo.getLastMessageBetweenUsers(user1Id, user2Id);
   }
 
-  async saveGroupMessage(message: Omit<GroupMessage, "id">): Promise<GroupMessage> {
+  async getLastMessageOfRoom(roomId: string): Promise<GroupMessage | null> {
+    return await this.messageRepo.getLastMessageOfRoom(roomId);
+  }
+
+  async saveGroupMessage(
+    message: Omit<GroupMessage, "id">
+  ): Promise<GroupMessage> {
     return await this.messageRepo.saveGroupMessage(message);
   }
 }

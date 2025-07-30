@@ -4,7 +4,7 @@ import { IMessageRepository } from "../../domain/repositories/message.repository
 import { GroupMessage } from "../../domain/enities/group-message.enity";
 import { GroupMessageModel } from "../../infrastructure/db/models/group-message.model";
 
-export class MessageRepository implements IMessageRepository{
+export class MessageRepository implements IMessageRepository {
   async save(message: Omit<Message, "id">): Promise<Message> {
     const saved = await new MessageModel(message).save();
     return {
@@ -13,6 +13,7 @@ export class MessageRepository implements IMessageRepository{
     };
   }
 
+  // get chat 1-1 and chat group history
   async getChatHistory(userA: string, userB: string): Promise<Message[]> {
     const messages = await MessageModel.find({
       $or: [
@@ -27,7 +28,11 @@ export class MessageRepository implements IMessageRepository{
     }));
   }
 
-  async getLastMessageBetweenUsers(user1Id: string, user2Id: string): Promise<Message | null> {
+  // get last message in chat 1-1
+  async getLastMessageBetweenUsers(
+    user1Id: string,
+    user2Id: string
+  ): Promise<Message | null> {
     const lastMsg = await MessageModel.findOne({
       $or: [
         { fromUserId: user1Id, toUserId: user2Id },
@@ -35,24 +40,44 @@ export class MessageRepository implements IMessageRepository{
       ],
     }).sort({ timestamp: -1 });
 
-    return lastMsg ? {
-      ...lastMsg.toObject(),
-      id: lastMsg._id.toString(),
-    } : null;
+    return lastMsg
+      ? {
+          ...lastMsg.toObject(),
+          id: lastMsg._id.toString(),
+        }
+      : null;
   }
 
-  async saveGroupMessage(message: Omit<GroupMessage, "id">): Promise<GroupMessage> {
+  // get group last messgae
+  async getLastMessageOfRoom(roomId: string): Promise<GroupMessage | null> {
+    const lastMsg = await GroupMessageModel.findOne({ roomId }).sort({
+      timestamp: -1,
+    });
+
+    return lastMsg
+      ? {
+          ...lastMsg.toObject(),
+          id: lastMsg._id.toString(),
+          senderAvatar: lastMsg.senderAvatar || "",
+        }
+      : null;
+  }
+
+  // save group chat message
+  async saveGroupMessage(
+    message: Omit<GroupMessage, "id">
+  ): Promise<GroupMessage> {
     const saved = await new GroupMessageModel(message).save();
-    
+
     return {
       id: saved._id.toString(),
       roomId: saved.roomId,
       fromUserId: saved.fromUserId,
       senderName: saved.senderName,
-      senderAvatar: saved.senderAvatar || '', 
+      senderAvatar: saved.senderAvatar || "",
       content: saved.content,
       timestamp: saved.timestamp,
-      replyTo: saved.replyTo
+      replyTo: saved.replyTo,
     };
   }
 }
