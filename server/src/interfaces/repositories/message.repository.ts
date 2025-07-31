@@ -80,4 +80,39 @@ export class MessageRepository implements IMessageRepository {
       replyTo: saved.replyTo,
     };
   }
+
+  async editMessage(id: string, content: string): Promise<Message> {
+    const updated = await MessageModel.findByIdAndUpdate(
+      id,
+      { content, edited: true },
+      { new: true }
+    );
+
+    if (!updated) {
+      throw new Error(`Message with id ${id} not found`);
+    }
+
+    return {
+      ...updated.toObject(),
+      id: updated._id.toString(),
+    };
+  }
+
+  async editGroupMessage(id: string, content: string): Promise<GroupMessage> {
+    const updated = await GroupMessageModel.findByIdAndUpdate(
+      id,
+      { content, edited: true },
+      { new: true }
+    );
+
+    if (!updated) {
+      throw new Error(`Group message with id ${id} not found`);
+    }
+
+    return {
+      ...updated.toObject(),
+      id: updated._id.toString(),
+      senderAvatar: updated.senderAvatar || undefined,
+    };
+  }
 }
