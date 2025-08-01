@@ -57,7 +57,14 @@ io.on("connection", (socket) => {
 
   socket.on(
     "send-message",
-    async ({ toUserId, fromUserId, message, senderName, senderAvatar, replyTo }) => {
+    async ({
+      toUserId,
+      fromUserId,
+      message,
+      senderName,
+      senderAvatar,
+      replyTo,
+    }) => {
       const newMessage = await messageUseCases.saveMessage({
         toUserId,
         fromUserId,
@@ -66,6 +73,7 @@ io.on("connection", (socket) => {
         content: message,
         timestamp: new Date(),
         replyTo: replyTo || undefined,
+        edited: false
       });
 
       const targetSocketId = onlineUsers.get(toUserId);
@@ -90,6 +98,22 @@ io.on("connection", (socket) => {
         });
       }
     });
+  });
+
+  socket.on("edit-message", async ({ messageId, newContent, toUserId }) => {
+    const updated = await messageUseCases.editMessage(messageId, newContent);
+    const socketId = onlineUsers.get(toUserId);
+    if (socketId) {
+      io.to(socketId).emit("message-edited", updated);
+    }
+  });
+
+  socket.on("edit-group-message", async ({ messageId, newContent, roomId }) => {
+    const updated = await messageUseCases.editGroupMessage(
+      messageId,
+      newContent
+    );
+    io.to(roomId).emit("group-message-edited", updated);
   });
 
   // handle save group message
@@ -123,9 +147,14 @@ io.on("connection", (socket) => {
   });
 
   // Group typing handler
-  socket.on("group-typing", ({ roomId, userId, username , avatar}) => {
+  socket.on("group-typing", ({ roomId, userId, username, avatar }) => {
     console.log(`✏️ User ${username} is typing in group ${roomId}`);
-    io.to(roomId).emit("group-user-typing", {roomId, username, userId, avatar});
+    io.to(roomId).emit("group-user-typing", {
+      roomId,
+      username,
+      userId,
+      avatar,
+    });
   });
 
   socket.on("group-stop-typing", ({ roomId, userId }) => {

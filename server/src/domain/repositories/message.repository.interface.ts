@@ -10,4 +10,9 @@ export interface IMessageRepository {
   ): Promise<Message | null>;
   saveGroupMessage(message: Omit<GroupMessage, "id">): Promise<GroupMessage>;
   getLastMessageOfRoom(roomId: string): Promise<GroupMessage | null>;
+  editMessage(messageId: string, newContent: string): Promise<Message>;
+  editGroupMessage(
+    messageId: string,
+    newContent: string
+  ): Promise<GroupMessage>;
 }

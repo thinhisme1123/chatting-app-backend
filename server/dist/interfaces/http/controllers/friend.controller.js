@@ -21,7 +21,6 @@ const sendFriendRequestController = (req, res) => __awaiter(void 0, void 0, void
         const request = yield friendUseCase.sendFriendRequest(fromUserId, toUserId);
         // 👇 Emit socket event to the recipient
         const targetSocketId = server_1.onlineUsers.get(toUserId);
-        console.log(targetSocketId);
         if (targetSocketId) {
             const notification = {
                 id: request._id.toString(),
@@ -34,7 +33,6 @@ const sendFriendRequestController = (req, res) => __awaiter(void 0, void 0, void
                 createdAt: request.createdAt.toISOString(),
                 read: false, // mặc định là chưa đọc
             };
-            console.log(notification);
             server_1.io.to(targetSocketId).emit("friend-request-notification", notification);
         }
         else {
@@ -72,7 +70,6 @@ const respondToFriendRequestController = (req, res) => __awaiter(void 0, void 0,
                 server_1.io.to(targetSocketId).emit("friend-request-accepted", {
                     newFriend: normalizedAcceptedUser,
                 });
-                console.log(normalizedAcceptedUser);
             }
             else {
                 console.warn("⚠️ Requester is not online:", requesterId);

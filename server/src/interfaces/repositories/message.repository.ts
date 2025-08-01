@@ -59,6 +59,7 @@ export class MessageRepository implements IMessageRepository {
           ...lastMsg.toObject(),
           id: lastMsg._id.toString(),
           senderAvatar: lastMsg.senderAvatar || "",
+          edited: false
         }
       : null;
   }
@@ -78,6 +79,43 @@ export class MessageRepository implements IMessageRepository {
       content: saved.content,
       timestamp: saved.timestamp,
       replyTo: saved.replyTo,
+      edited: false
+    };
+  }
+
+  async editMessage(id: string, content: string): Promise<Message> {
+    const updated = await MessageModel.findByIdAndUpdate(
+      id,
+      { content, edited: true },
+      { new: true }
+    );
+
+    if (!updated) {
+      throw new Error(`Message with id ${id} not found`);
+    }
+
+    return {
+      ...updated.toObject(),
+      id: updated._id.toString(),
+    };
+  }
+
+  async editGroupMessage(id: string, content: string): Promise<GroupMessage> {
+    const updated = await GroupMessageModel.findByIdAndUpdate(
+      id,
+      { content, edited: true },
+      { new: true }
+    );
+
+    if (!updated) {
+      throw new Error(`Group message with id ${id} not found`);
+    }
+
+    return {
+      ...updated.toObject(),
+      id: updated._id.toString(),
+      senderAvatar: updated.senderAvatar || undefined,
+      edited: false
     };
   }
 }

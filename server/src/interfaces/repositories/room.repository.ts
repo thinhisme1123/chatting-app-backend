@@ -81,8 +81,8 @@ export class RoomRepository implements IRoomRepository {
       senderAvatar: msg.senderAvatar,
       content: msg.content,
       timestamp: msg.timestamp,
-      replyTo: msg.replyTo
+      replyTo: msg.replyTo,
+      edited: msg.edited
     }));
   }
-  //lỗi UI không hiển thị đủ thông tin mặc dù dã fetch đúng là lỗi từ bên backend đã return về thiếu thông tin
 }

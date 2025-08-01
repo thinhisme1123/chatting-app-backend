@@ -30,4 +30,12 @@ export class MessageUseCases {
   ): Promise<GroupMessage> {
     return await this.messageRepo.saveGroupMessage(message);
   }
+
+  async editMessage(id: string, content: string): Promise<Message> {
+    return this.messageRepo.editMessage(id, content);
+  }
+
+  async editGroupMessage(id: string, content: string): Promise<GroupMessage> {
+    return this.messageRepo.editGroupMessage(id, content);
+  }
 }
