@@ -63,14 +63,13 @@ export const groupMessageSocketHandler = (
       content,
       replyTo: replyTo,
       timestamp,
+      edited: false
     });
 
     io.to(roomId).emit("receive-message", {
       ...savedMessage,
       isOwn: false,
     });
-
-    console.log(`📨 Group msg in ${roomId}:`, content);
   });
 
   socket.on("join-room", ({ roomId }) => {

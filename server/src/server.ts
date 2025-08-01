@@ -73,6 +73,7 @@ io.on("connection", (socket) => {
         content: message,
         timestamp: new Date(),
         replyTo: replyTo || undefined,
+        edited: false
       });
 
       const targetSocketId = onlineUsers.get(toUserId);
@@ -100,15 +101,11 @@ io.on("connection", (socket) => {
   });
 
   socket.on("edit-message", async ({ messageId, newContent, toUserId }) => {
-    console.log(newContent);
-    console.log(toUserId);
-    
     const updated = await messageUseCases.editMessage(messageId, newContent);
     const socketId = onlineUsers.get(toUserId);
-      if (socketId) {
-        io.to(toUserId).emit("message-edited", updated);
-      }
-    
+    if (socketId) {
+      io.to(socketId).emit("message-edited", updated);
+    }
   });
 
   socket.on("edit-group-message", async ({ messageId, newContent, roomId }) => {

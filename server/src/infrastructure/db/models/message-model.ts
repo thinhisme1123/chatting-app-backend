@@ -17,6 +17,7 @@ const MessageSchema = new mongoose.Schema({
     default: undefined, 
     required: false, 
   },
+  edited: {type: Boolean, default: false}
 });
 
 export const MessageModel = mongoose.model("Message", MessageSchema);

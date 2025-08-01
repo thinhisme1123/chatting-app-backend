@@ -11,4 +11,5 @@ export interface Message {
     content: string;
     senderName: string;
   } | null;
+  edited: boolean
 }

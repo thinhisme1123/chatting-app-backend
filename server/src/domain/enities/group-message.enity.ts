@@ -12,4 +12,5 @@ export interface GroupMessage {
     content: string;
     senderName: string;
   } | null;
+  edited: boolean
 }

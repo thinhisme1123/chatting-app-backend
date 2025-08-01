@@ -59,6 +59,7 @@ export class MessageRepository implements IMessageRepository {
           ...lastMsg.toObject(),
           id: lastMsg._id.toString(),
           senderAvatar: lastMsg.senderAvatar || "",
+          edited: false
         }
       : null;
   }
@@ -78,6 +79,7 @@ export class MessageRepository implements IMessageRepository {
       content: saved.content,
       timestamp: saved.timestamp,
       replyTo: saved.replyTo,
+      edited: false
     };
   }
 
@@ -113,6 +115,7 @@ export class MessageRepository implements IMessageRepository {
       ...updated.toObject(),
       id: updated._id.toString(),
       senderAvatar: updated.senderAvatar || undefined,
+      edited: false
     };
   }
 }
