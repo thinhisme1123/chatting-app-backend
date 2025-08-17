@@ -176,23 +176,28 @@ io.on("connection", (socket) => {
     if (socketId) {
       io.to(socketId).emit("call:incoming", { from, offer });
     }
-    
   });
 
   socket.on("call:answer", ({ to, answer }) => {
-    io.to(to).emit("call:answered", { answer });
+    const socketId = onlineUsers.get(to);
+    if (socketId) {
+      io.to(socketId).emit("call:answered", { to, answer });
+    }
   });
 
   socket.on("call:ice-candidate", ({ to, candidate }) => {
     io.to(to).emit("call:ice-candidate", { candidate });
   });
 
-  socket.on("call:cancel", ({ to }) => {
-    io.to(to).emit("call:cancelled");
+  socket.on("call:cancel", ({ to, from }) => {
+    const socketId = onlineUsers.get(to);
+    if (socketId) {
+      io.to(socketId).emit("call:cancelled", { from });
+    }
   });
 
-  socket.on("call:reject", ({ to }) => {
-    io.to(to).emit("call:rejected");
+  socket.on("call:reject", ({ to, from }) => {
+    io.to(to).emit("call:rejected", { from });
   });
 
   socket.on("call:end", ({ to }) => {
