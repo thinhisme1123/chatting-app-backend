@@ -73,7 +73,7 @@ io.on("connection", (socket) => {
         content: message,
         timestamp: new Date(),
         replyTo: replyTo || undefined,
-        edited: false
+        edited: false,
       });
 
       const targetSocketId = onlineUsers.get(toUserId);
@@ -168,6 +168,40 @@ io.on("connection", (socket) => {
       console.log("Stop");
       io.to(targetSocketId).emit("user-stop-typing", { userId });
     }
+  });
+
+  // calling section
+  socket.on("call:offer", ({ from, to, offer }) => {
+    const socketId = onlineUsers.get(to);
+    if (socketId) {
+      io.to(socketId).emit("call:incoming", { from, offer });
+    }
+  });
+
+  socket.on("call:answer", ({ to, answer }) => {
+    const socketId = onlineUsers.get(to);
+    if (socketId) {
+      io.to(socketId).emit("call:answered", { to, answer });
+    }
+  });
+
+  socket.on("call:ice-candidate", ({ to, candidate }) => {
+    io.to(to).emit("call:ice-candidate", { candidate });
+  });
+
+  socket.on("call:cancel", ({ to, from }) => {
+    const socketId = onlineUsers.get(to);
+    if (socketId) {
+      io.to(socketId).emit("call:cancelled", { from });
+    }
+  });
+
+  socket.on("call:reject", ({ to, from }) => {
+    io.to(to).emit("call:rejected", { from });
+  });
+
+  socket.on("call:end", ({ to }) => {
+    io.to(to).emit("call:ended");
   });
 });
 
