@@ -5,11 +5,13 @@ export interface Message {
   senderName: string;
   senderAvatar?: string;
   content: string;
+  imageUrl?: string | '';
   timestamp: Date;
   replyTo?: {
     id: string;
     content: string;
     senderName: string;
+    imageUrl?: string;
   } | null;
   edited: boolean
 }

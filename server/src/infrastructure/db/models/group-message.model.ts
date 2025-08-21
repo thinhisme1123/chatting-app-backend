@@ -7,12 +7,14 @@ const GroupMessageSchema = new mongoose.Schema({
   senderName: { type: String, required: true },
   senderAvatar: { type: String},
   content: { type: String, required: true },
+  imageUrl: { type: String, default: null },
   timestamp: { type: Date, default: Date.now },
   replyTo: {
     type: {
       id: { type: String, default: null },
       content: { type: String, default: null },
       senderName: { type: String, default: null },
+      imageUrl: { type: String, default: null },
     },
     default: undefined, 
     required: false, 

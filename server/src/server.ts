@@ -62,6 +62,7 @@ io.on("connection", (socket) => {
       fromUserId,
       message,
       senderName,
+      imageUrl,
       senderAvatar,
       replyTo,
     }) => {
@@ -70,6 +71,7 @@ io.on("connection", (socket) => {
         fromUserId,
         senderName,
         senderAvatar,
+        imageUrl,
         content: message,
         timestamp: new Date(),
         replyTo: replyTo || undefined,
