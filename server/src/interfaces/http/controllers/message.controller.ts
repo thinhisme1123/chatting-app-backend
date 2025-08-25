@@ -51,7 +51,7 @@ export const groupMessageSocketHandler = (
   messageUseCase: MessageUseCases
 ) => {
   socket.on("send-group-message", async (data) => {
-    const { roomId, content, fromUserId, senderName, senderAvatar, replyTo } =
+    const { roomId, content, fromUserId, senderName, imageUrl, senderAvatar, replyTo } =
       data;
     const timestamp = new Date();
 
@@ -60,6 +60,7 @@ export const groupMessageSocketHandler = (
       fromUserId,
       senderName,
       senderAvatar,
+      imageUrl,
       content,
       replyTo: replyTo,
       timestamp,
