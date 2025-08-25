@@ -79,6 +79,7 @@ export class RoomRepository implements IRoomRepository {
       fromUserId: msg.fromUserId,
       senderName: msg.senderName,
       senderAvatar: msg.senderAvatar,
+      imageUrl: msg.imageUrl,
       content: msg.content,
       timestamp: msg.timestamp,
       replyTo: msg.replyTo,
