@@ -5,6 +5,7 @@ import { GroupMessage } from "../../domain/enities/group-message.enity";
 import { GroupMessageModel } from "../../infrastructure/db/models/group-message.model";
 
 export class MessageRepository implements IMessageRepository {
+  // save the mesage ( chat 1-1 )
   async save(message: Omit<Message, "id">): Promise<Message> {
     const saved = await new MessageModel(message).save();
     return {
@@ -59,7 +60,7 @@ export class MessageRepository implements IMessageRepository {
           ...lastMsg.toObject(),
           id: lastMsg._id.toString(),
           senderAvatar: lastMsg.senderAvatar || "",
-          edited: false
+          edited: false,
         }
       : null;
   }
@@ -79,7 +80,7 @@ export class MessageRepository implements IMessageRepository {
       content: saved.content,
       timestamp: saved.timestamp,
       replyTo: saved.replyTo,
-      edited: false
+      edited: false,
     };
   }
 
@@ -115,7 +116,19 @@ export class MessageRepository implements IMessageRepository {
       ...updated.toObject(),
       id: updated._id.toString(),
       senderAvatar: updated.senderAvatar || undefined,
-      edited: false
+      edited: false,
     };
+  }
+  // dlelete message
+  async deleteMessage(
+    id: string,
+    isGroup: boolean,
+    selectUserId: string
+  ): Promise<void> {
+    if (isGroup) {
+      await GroupMessageModel.findByIdAndDelete(id);
+    } else {
+      await MessageModel.findByIdAndDelete(id);
+    }
   }
 }

@@ -15,4 +15,5 @@ export interface IMessageRepository {
     messageId: string,
     newContent: string
   ): Promise<GroupMessage>;
+  deleteMessage(id: string, isGroup: boolean, selectUserId: string): Promise<void>
 }

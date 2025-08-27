@@ -84,3 +84,25 @@ export const getGroupLastMessageController = async (req: Request, res: Response)
   const message = await messageUseCases.getLastMessageOfRoom(roomId);
   res.json(message);
 };
+
+export const deleteMessageController = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const { messageId } = req.params;
+    const { isGroup, targetId } = req.body;
+
+    if (!messageId) {
+      res.status(400).json({ error: "Message ID is required" });
+      return;
+    }
+
+    await messageUseCases.deleteMessage(messageId, isGroup, targetId);
+
+    res.status(200).json({ success: true, messageId });
+  } catch (error) {
+    console.error("Delete message failed:", error);
+    res.status(500).json({ error: "Failed to delete message" });
+  }
+};
