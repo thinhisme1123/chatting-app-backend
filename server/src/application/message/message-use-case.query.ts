@@ -1,10 +1,10 @@
 // 📁 server/src/application/usecases/MessageUseCases.ts
-import { MessageRepository } from "../../interfaces/repositories/message.repository";
-import { Message } from "../../domain/enities/message.enity";
 import { GroupMessage } from "../../domain/enities/group-message.enity";
+import { Message } from "../../domain/enities/message.enity";
+import { IMessageRepository } from "../../domain/repositories/message.repository.interface";
 
 export class MessageUseCases {
-  constructor(private readonly messageRepo: MessageRepository) {}
+  constructor(private readonly messageRepo: IMessageRepository) {}
 
   async saveMessage(message: Omit<Message, "id">): Promise<Message> {
     return await this.messageRepo.save(message);
@@ -37,5 +37,13 @@ export class MessageUseCases {
 
   async editGroupMessage(id: string, content: string): Promise<GroupMessage> {
     return this.messageRepo.editGroupMessage(id, content);
+  }
+
+  async deleteMessage(
+    id: string,
+    isGroup: boolean,
+    selectUserId: string
+  ) : Promise<void> {
+    this.messageRepo.deleteMessage(id, isGroup, selectUserId);
   }
 }
