@@ -85,9 +85,7 @@ io.on("connection", (socket) => {
 
       if (targetSocketId) {
         // send decoded back to client for UI rendering
-        io.to(targetSocketId).emit("receive-message", {
-          newMessage,
-        });
+        io.to(targetSocketId).emit("receive-message", newMessage);
       }
     }
   );
