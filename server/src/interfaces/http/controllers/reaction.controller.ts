@@ -30,3 +30,14 @@ export const removeReaction = async (req: Request, res: Response) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+export const getReactionsByMessage = async (req: Request, res: Response) => {
+  const { messageId } = req.params;
+
+  try {
+    const reactions = await MessageReactionModel.find({ messageId }).populate("userId", "name avatar");
+    res.json(reactions);
+  } catch (err: any) {
+    res.status(500).json({ message: err.message });
+  }
+};
