@@ -155,14 +155,27 @@ export const resetPasswordController = async (req: Request, res: Response): Prom
     return;
   }
 
-  // Hash new password
-  const hashedPassword = await bcrypt.hash(newPassword, 10);
+  try {
+    // Hash new password
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
 
-  // TODO: update password in DB (this is a fake example)
-  // await userRepository.updatePassword(email, hashedPassword);
+    // ✅ Update password in DB
+    const user = await UserModel.findOneAndUpdate(
+      { email },
+      { password: hashedPassword },
+      { new: true }
+    );
 
-  // cleanup reset code
-  delete resetCodes[email];
+    if (!user) {
+      res.status(404).json({ message: "User not found" });
+      return;
+    }
 
-  res.json({ message: "Password reset successfully" });
+    // cleanup reset code
+    delete resetCodes[email];
+
+    res.json({ message: "Password reset successfully" });
+  } catch (err: any) {
+    res.status(500).json({ message: "Server error while resetting password" });
+  }
 };

@@ -21,7 +21,7 @@ export const addOrUpdateReaction = async (req: Request, res: Response) => {
 
 export const removeReaction = async (req: Request, res: Response) => {
   const { messageId } = req.params;
-  const userId = req.body;
+  const { userId } = req.body;
 
   try {
     await MessageReactionModel.findOneAndDelete({ messageId, userId });
@@ -35,7 +35,7 @@ export const getReactionsByMessage = async (req: Request, res: Response) => {
   const { messageId } = req.params;
 
   try {
-    const reactions = await MessageReactionModel.find({ messageId }).populate("userId", "name avatar");
+    const reactions = await MessageReactionModel.find({ messageId })
     res.json(reactions);
   } catch (err: any) {
     res.status(500).json({ message: err.message });
