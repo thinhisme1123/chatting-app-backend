@@ -10,6 +10,7 @@ import { MessageRepository } from "./interfaces/repositories/message.repository"
 import { MessageUseCases } from "./application/message/message-use-case.query";
 import cookieParser from "cookie-parser";
 import { groupMessageSocketHandler } from "./interfaces/http/controllers/message.controller";
+import { encodeMessage, decodeMessage } from "./utils/endecode-mesage";
 
 const messageUseCases = new MessageUseCases(new MessageRepository());
 
@@ -66,13 +67,15 @@ io.on("connection", (socket) => {
       senderAvatar,
       replyTo,
     }) => {
+      const encodedContent = encodeMessage(message);
+
       const newMessage = await messageUseCases.saveMessage({
         toUserId,
         fromUserId,
         senderName,
         senderAvatar,
         imageUrl,
-        content: message,
+        content: encodedContent, // save encoded
         timestamp: new Date(),
         replyTo: replyTo || undefined,
         edited: false,
@@ -81,6 +84,7 @@ io.on("connection", (socket) => {
       const targetSocketId = onlineUsers.get(toUserId);
 
       if (targetSocketId) {
+        // send decoded back to client for UI rendering
         io.to(targetSocketId).emit("receive-message", newMessage);
       }
     }
@@ -103,7 +107,9 @@ io.on("connection", (socket) => {
   });
 
   socket.on("edit-message", async ({ messageId, newContent, toUserId }) => {
-    const updated = await messageUseCases.editMessage(messageId, newContent);
+    const encodedEditedMessage = encodeMessage(newContent);
+
+    const updated = await messageUseCases.editMessage(messageId, encodedEditedMessage);
     const socketId = onlineUsers.get(toUserId);
     if (socketId) {
       io.to(socketId).emit("message-edited", updated);
@@ -111,9 +117,11 @@ io.on("connection", (socket) => {
   });
 
   socket.on("edit-group-message", async ({ messageId, newContent, roomId }) => {
+    const encodedEditedMessage = encodeMessage(newContent); 
+
     const updated = await messageUseCases.editGroupMessage(
       messageId,
-      newContent
+      encodedEditedMessage
     );
     io.to(roomId).emit("group-message-edited", updated);
   });
