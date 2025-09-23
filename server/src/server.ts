@@ -175,7 +175,6 @@ io.on("connection", (socket) => {
   socket.on("stop-typing", ({ userId, toUserId }) => {
     const targetSocketId = onlineUsers.get(toUserId);
     if (targetSocketId) {
-      console.log("Stop");
       io.to(targetSocketId).emit("user-stop-typing", { userId });
     }
   });
