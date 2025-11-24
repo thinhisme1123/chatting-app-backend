@@ -39,7 +39,7 @@ export const generateSmartReply = async (
             {
               role: "system",
               content:
-                "You are a smart assistant. Suggest 3 short, casual replies.",
+                "You are a helpful AI that suggests 3 short casual chat replies in Vietnamese. Output only the 3 replies, each on a new line. No explanation.",
             },
             { role: "user", content: message },
           ],
